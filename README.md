@@ -1,4 +1,4 @@
-# MED-Net
+# PyramidKAN-Net
 
 ## 0. Abstract
 
