@@ -75,4 +75,4 @@ The performance of the proposed method is compared with the state-of-the-art mod
 
 ## 7. Acknowledgement
 
-Thanks to [U-KAN](https://github.com/Zhaoyi-Yan/U-KAN) and [PSPN](https://github.com/hszhao/PSPNet) for their outstanding works.
+Thanks to [U-KAN](https://github.com/Zhaoyi-Yan/U-KAN) and [PSPNet](https://github.com/hszhao/PSPNet) for their outstanding works.
