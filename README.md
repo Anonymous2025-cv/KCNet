@@ -1,14 +1,14 @@
-# PyramidKAN-Net
+# KCNet
 
 ## 0. Abstract
 
-Accurate and efficient medical image segmentation is crucial in clinical tasks such as disease diagnosis and treatment planning. In recent years, deep learning technology has significantly promoted the development of segmentation with its powerful feature extraction capabilities. However, most existing methods still face the following challenges: medical image lesions vary in size, which usually leads to insufficient multi-scale feature extraction capabilities; it is difficult to achieve efficient modeling when dealing with clustered lesions with complex structures or clustered distributions, resulting in insufficient model attention to clustered lesions, thus affecting segmentation performance and efficiency. To address these challenges, we propose a new framework called PyramidKan-Net, which combines an enhanced pyramid fusion module with a cluster-sensitive distance (CSD) loss function. This design makes full use of the nonlinear modeling capabilities and interpretability of the KAN network, so that the network can capture multi-scale features in combination with contextual information with minimal computational overhead. In addition, the proposed cluster-sensitive distance loss function introduces a structural distance penalty of "intra-class compactness and inter-class separation" to more effectively guide the model to learn coherent, complete, and well-defined segmentation results. While maintaining the overall segmentation performance, it improves the detection and segmentation of small lesion clusters or edge structures, thereby improving the segmentation performance of the model. Comprehensive experiments on three public benchmark datasets, BUSI, GlaS, and ISIC2017, show that our method consistently outperforms the state-of-the-art methods in multiple evaluation indicators, demonstrating its robustness and effectiveness in solving key segmentation challenges. If you need to reproduce, you can visit the following link to view the implementation code: https://github.com/Anonymous2025-cv/PyramidKAN-Net.
+Accurate and efficient medical image segmentation is crucial in clinical tasks such as disease diagnosis and treatment planning. In recent years, deep learning technology has significantly promoted the development of segmentation with its powerful feature extraction capabilities. However, most existing methods still face the following challenges: medical image lesions vary in size, which usually leads to insufficient multi-scale feature extraction capabilities; it is difficult to achieve efficient modeling when dealing with clustered lesions with complex structures or clustered distributions, resulting in insufficient model attention to clustered lesions, thus affecting segmentation performance and efficiency. To address these challenges, we propose a new framework called KCNet, which combines an enhanced pyramid fusion module with a cluster-sensitive distance (CSD) loss function. This design makes full use of the nonlinear modeling capabilities and interpretability of the KAN network, so that the network can capture multi-scale features in combination with contextual information with minimal computational overhead. In addition, the proposed cluster-sensitive distance loss function introduces a structural distance penalty of "intra-class compactness and inter-class separation" to more effectively guide the model to learn coherent, complete, and well-defined segmentation results. While maintaining the overall segmentation performance, it improves the detection and segmentation of small lesion clusters or edge structures, thereby improving the segmentation performance of the model. Comprehensive experiments on three public benchmark datasets, BUSI, GlaS, and ISIC2017, show that our method consistently outperforms the state-of-the-art methods in multiple evaluation indicators, demonstrating its robustness and effectiveness in solving key segmentation challenges. If you need to reproduce, you can visit the following link to view the implementation code: https://github.com/Anonymous2025-cv/KCNet.
 
 
 ## 1. Overview
 
 <div align="center">
-<img src="Figs/PyramidKAN-Net.jpg" />
+<img src="Figs/KCNet.jpg" />
 </div>
 
 
@@ -47,7 +47,7 @@ ISIC2017: The dataset can be found [here](https://challenge.isic-archive.com/dat
 
 
 
-## 4. Train the PyramidKAN-Net
+## 4. Train the KCNet
 
 ```
 python train.py --arch UKAN --dataset {dataset} --input_w {input_size} --input_h {input_size} --name {dataset}_UKAN  --data_dir [YOUR_DATA_DIR]
@@ -55,7 +55,7 @@ python train.py --arch UKAN --dataset {dataset} --input_w {input_size} --input_h
 
 
 
-## 5. Test the PyramidKAN-Net 
+## 5. Test the KCNet 
 
 ```
 python val.py --name ${dataset}_UKAN --output_dir [YOUR_OUTPUT_DIR] 
