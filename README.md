@@ -15,7 +15,7 @@ With the widespread adoption of the Kolmogorov-Arnold Network (KAN) framework in
 
 ## 2. Main Environments
 
-The environment installation process can be carried out as follows:
+You can follow the [U-KAN](https://github.com/Zhaoyi-Yan/U-KAN) and [UltraLight-VM-UNet](https://github.com/wurenkai/UltraLight-VM-UNet) installation instructions, or follow the steps below (Python 3.8):
 
 ```
 conda create -n KCNet python=3.8
@@ -75,4 +75,4 @@ The performance of the proposed method is compared with the state-of-the-art mod
 
 ## 7. Acknowledgement
 
-Thanks to [U-KAN](https://github.com/Zhaoyi-Yan/U-KAN) and [PSPNet](https://github.com/hszhao/PSPNet) for their outstanding works.
+Thanks to [U-KAN](https://github.com/Zhaoyi-Yan/U-KAN) and [UltraLight-VM-UNet](https://github.com/wurenkai/UltraLight-VM-UNet) for their outstanding works.
