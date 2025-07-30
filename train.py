@@ -38,7 +38,6 @@ import subprocess
 
 from pdb import set_trace as st
 
-
 ARCH_NAMES = archs.__all__
 LOSS_NAMES = losses.__all__
 LOSS_NAMES.append('BCEWithLogitsLoss')
@@ -62,10 +61,10 @@ def parse_args():
 
     parser.add_argument('--dataseed', default=2981, type=int,
                         help='')
-    
+
     # model
     parser.add_argument('--arch', '-a', metavar='ARCH', default='UKAN')
-    
+
     parser.add_argument('--deep_supervision', default=False, type=str2bool)
     parser.add_argument('--input_channels', default=3, type=int,
                         help='input channels')
@@ -78,25 +77,24 @@ def parse_args():
     parser.add_argument('--input_list', type=list_type, default=[128, 160, 256])
 
     # loss
-    parser.add_argument('--loss', default='BCEDiceLoss',
+    parser.add_argument('--loss', default='TotalLoss',
                         choices=LOSS_NAMES,
                         help='loss: ' +
-                        ' | '.join(LOSS_NAMES) +
-                        ' (default: BCEDiceLoss)')
-    
+                             ' | '.join(LOSS_NAMES) +
+                             ' (default: BCEDiceLoss)')
+
     # dataset
-    parser.add_argument('--dataset', default='busi', help='dataset name')      
+    parser.add_argument('--dataset', default='busi', help='dataset name')
     parser.add_argument('--data_dir', default='inputs', help='dataset dir')
 
     parser.add_argument('--output_dir', default='outputs', help='ouput dir')
-
 
     # optimizer
     parser.add_argument('--optimizer', default='Adam',
                         choices=['Adam', 'SGD'],
                         help='loss: ' +
-                        ' | '.join(['Adam', 'SGD']) +
-                        ' (default: Adam)')
+                             ' | '.join(['Adam', 'SGD']) +
+                             ' (default: Adam)')
 
     parser.add_argument('--lr', '--learning_rate', default=1e-4, type=float,
                         metavar='LR', help='initial learning rate')
@@ -120,15 +118,13 @@ def parse_args():
     parser.add_argument('--factor', default=0.1, type=float)
     parser.add_argument('--patience', default=2, type=int)
     parser.add_argument('--milestones', default='1,2', type=str)
-    parser.add_argument('--gamma', default=2/3, type=float)
+    parser.add_argument('--gamma', default=2 / 3, type=float)
     parser.add_argument('--early_stopping', default=-1, type=int,
                         metavar='N', help='early stopping (default: -1)')
     parser.add_argument('--cfg', type=str, metavar="FILE", help='path to config file', )
-    parser.add_argument('--num_workers', default=4, type=int)
+    parser.add_argument('--num_workers', default=0, type=int)
 
     parser.add_argument('--no_kan', action='store_true')
-
-
 
     config = parser.parse_args()
 
@@ -156,7 +152,7 @@ def train(config, train_loader, model, criterion, optimizer):
 
             iou, dice, _ = iou_score(outputs[-1], target)
             iou_, dice_, hd_, hd95_, recall_, specificity_, precision_ = indicators(outputs[-1], target)
-            
+
         else:
             output = model(input)
             loss = criterion(output, target)
@@ -186,7 +182,7 @@ def train(config, train_loader, model, criterion, optimizer):
 def validate(config, val_loader, model, criterion):
     avg_meters = {'loss': AverageMeter(),
                   'iou': AverageMeter(),
-                   'dice': AverageMeter()}
+                  'dice': AverageMeter()}
 
     # switch to evaluate mode
     model.eval()
@@ -223,10 +219,10 @@ def validate(config, val_loader, model, criterion):
             pbar.update(1)
         pbar.close()
 
-
     return OrderedDict([('loss', avg_meters['loss'].avg),
                         ('iou', avg_meters['iou'].avg),
                         ('dice', avg_meters['dice'].avg)])
+
 
 def seed_torch(seed=1029):
     random.seed(seed)
@@ -253,7 +249,7 @@ def main():
             config['name'] = '%s_%s_wDS' % (config['dataset'], config['arch'])
         else:
             config['name'] = '%s_%s_woDS' % (config['dataset'], config['arch'])
-    
+
     os.makedirs(f'{output_dir}/{exp_name}', exist_ok=True)
 
     print('-' * 20)
@@ -273,10 +269,10 @@ def main():
     cudnn.benchmark = True
 
     # create model
-    model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'], config['deep_supervision'], embed_dims=config['input_list'], no_kan=config['no_kan'])
+    model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'], config['deep_supervision'],
+                                           embed_dims=config['input_list'], no_kan=config['no_kan'])
 
     model = model.cuda()
-
 
     param_groups = []
 
@@ -285,22 +281,21 @@ def main():
 
     for name, param in model.named_parameters():
         # print(name, "=>", param.shape)
-        if 'layer' in name.lower() and 'fc' in name.lower(): # higher lr for kan layers
+        if 'layer' in name.lower() and 'fc' in name.lower():  # higher lr for kan layers
             # kan_fc_params.append(name)
-            param_groups.append({'params': param, 'lr': config['kan_lr'], 'weight_decay': config['kan_weight_decay']}) 
+            param_groups.append({'params': param, 'lr': config['kan_lr'], 'weight_decay': config['kan_weight_decay']})
         else:
             # other_params.append(name)
-            param_groups.append({'params': param, 'lr': config['lr'], 'weight_decay': config['weight_decay']})  
-    
+            param_groups.append({'params': param, 'lr': config['lr'], 'weight_decay': config['weight_decay']})
 
-    
-    # st()
+            # st()
     if config['optimizer'] == 'Adam':
         optimizer = optim.Adam(param_groups)
 
 
     elif config['optimizer'] == 'SGD':
-        optimizer = optim.SGD(params, lr=config['lr'], momentum=config['momentum'], nesterov=config['nesterov'], weight_decay=config['weight_decay'])
+        optimizer = optim.SGD(params, lr=config['lr'], momentum=config['momentum'], nesterov=config['nesterov'],
+                              weight_decay=config['weight_decay'])
     else:
         raise NotImplementedError
 
@@ -308,9 +303,11 @@ def main():
         scheduler = lr_scheduler.CosineAnnealingLR(
             optimizer, T_max=config['epochs'], eta_min=config['min_lr'])
     elif config['scheduler'] == 'ReduceLROnPlateau':
-        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, factor=config['factor'], patience=config['patience'], verbose=1, min_lr=config['min_lr'])
+        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, factor=config['factor'], patience=config['patience'],
+                                                   verbose=1, min_lr=config['min_lr'])
     elif config['scheduler'] == 'MultiStepLR':
-        scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[int(e) for e in config['milestones'].split(',')], gamma=config['gamma'])
+        scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[int(e) for e in config['milestones'].split(',')],
+                                             gamma=config['gamma'])
     elif config['scheduler'] == 'ConstantLR':
         scheduler = None
     else:
@@ -322,20 +319,18 @@ def main():
     dataset_name = config['dataset']
     img_ext = '.png'
 
-    if args.dataset == 'busi':
+    if dataset_name == 'busi':
         mask_ext = '_mask.png'
-    elif args.dataset == 'glas':
+    elif dataset_name == 'glas':
         mask_ext = '.png'
-    elif args.dataset == 'cvc':
+    elif dataset_name == 'cvc':
         mask_ext = '.png'
-    elif args.dataset == 'kvasir':
+    elif dataset_name == 'kvasir':
         mask_ext = '.jpg'
-    elif args.dataset == 'isic2017':
+    elif dataset_name == 'monuseg':
         mask_ext = '.png'
 
-    if args.dataset == 'kvasir':
-        img_ext = '.jpg'
-    if args.dataset == 'isic2017':
+    if dataset_name == 'kvasir':
         img_ext = '.jpg'
 
     # Data loading code
@@ -366,7 +361,7 @@ def main():
         transform=train_transform)
     val_dataset = Dataset(
         img_ids=val_img_ids,
-        img_dir=os.path.join(config['data_dir'] ,config['dataset'], 'images'),
+        img_dir=os.path.join(config['data_dir'], config['dataset'], 'images'),
         mask_dir=os.path.join(config['data_dir'], config['dataset'], 'masks'),
         img_ext=img_ext,
         mask_ext=mask_ext,
@@ -396,9 +391,8 @@ def main():
         ('val_dice', []),
     ])
 
-
     best_iou = 0
-    best_dice= 0
+    best_dice = 0
     trigger = 0
     for epoch in range(config['epochs']):
         print('Epoch [%d/%d]' % (epoch, config['epochs']))
@@ -452,6 +446,9 @@ def main():
             break
 
         torch.cuda.empty_cache()
-    
+    log['best_iou'].append(val_log['best_iou'])
+    log['best_dice'].append(val_log['best_dice'])
+
+
 if __name__ == '__main__':
     main()
