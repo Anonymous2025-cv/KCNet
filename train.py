@@ -63,7 +63,7 @@ def parse_args():
                         help='')
 
     # model
-    parser.add_argument('--arch', '-a', metavar='ARCH', default='UKAN')
+    parser.add_argument('--arch', '-a', metavar='ARCH', default='KCNet')
 
     parser.add_argument('--deep_supervision', default=False, type=str2bool)
     parser.add_argument('--input_channels', default=3, type=int,
