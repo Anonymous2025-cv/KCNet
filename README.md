@@ -8,7 +8,7 @@ With the widespread adoption of the Kolmogorov-Arnold Network (KAN) framework in
 ## 1. Overview
 
 <div align="center">
-<img src="Figs/KCNet.png" />
+<img src="Figs/Fig1.png" />
 </div>
 
 
