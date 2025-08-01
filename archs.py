@@ -22,7 +22,7 @@ from pdb import set_trace as st
 
 from kan import KANLinear, KAN
 from torch.nn import init
-__all__ = ['UNet', 'ResUNet', 'KANet']
+__all__ = ['UNet', 'ResUNet', 'KANet', 'KCNet']
 
 class KANLayer(nn.Module):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0., no_kan=False):
@@ -341,7 +341,7 @@ class PyramidKAN(nn.Module):
         return torch.cat([x, feat1, feat2, feat3, feat4], dim=1)
 
 
-class UKAN(nn.Module):
+class KCNet(nn.Module):
     def __init__(self, num_classes, input_channels=3, deep_supervision=False, img_size=224, patch_size=16, in_chans=3,
                  embed_dims=[256, 320, 512], no_kan=False,
                  drop_rate=0., drop_path_rate=0., norm_layer=nn.LayerNorm, depths=[1, 1, 1], **kwargs):
