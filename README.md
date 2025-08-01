@@ -50,7 +50,7 @@ ISIC2017: The dataset can be found [here](https://challenge.isic-archive.com/dat
 ## 4. Train the KCNet
 
 ```
-python train.py --arch UKAN --dataset {dataset} --input_w {input_size} --input_h {input_size} --name {dataset}_UKAN  --data_dir [YOUR_DATA_DIR]
+python train.py --arch KCNet --dataset {dataset} --input_w {input_size} --input_h {input_size} --name {dataset}_KCNet  --data_dir [YOUR_DATA_DIR]
 ```
 
 
@@ -58,7 +58,7 @@ python train.py --arch UKAN --dataset {dataset} --input_w {input_size} --input_h
 ## 5. Test the KCNet 
 
 ```
-python val.py --name ${dataset}_UKAN --output_dir [YOUR_OUTPUT_DIR] 
+python val.py --name ${dataset}_KCNet --output_dir [YOUR_OUTPUT_DIR] 
 ```
 
 
