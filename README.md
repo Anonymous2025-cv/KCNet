@@ -8,7 +8,7 @@ With the widespread adoption of the Kolmogorov-Arnold Network (KAN) framework in
 ## 1. Overview
 
 <div align="center">
-<img src="Figs/Fig.png" />
+<img src="Figs/Fig1.png" />
 </div>
 
 
@@ -68,7 +68,7 @@ python val.py --name ${dataset}_KCNet --output_dir [YOUR_OUTPUT_DIR]
 The performance of the proposed method is compared with the state-of-the-art models on the BUSI, GlaS, and ISIC2017 datasets, where the best results are shown in bold.
 
 <div align="center">
-<img src="Figs/Tab.png" />
+<img src="Figs/Tab1.png" />
 </div>
 
 
